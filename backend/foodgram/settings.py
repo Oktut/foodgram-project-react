@@ -8,9 +8,9 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY', default=' ')
 
-DEBUG = False
+DEBUG = os.getenv('DEBUG', default='False')
 
-ALLOWED_HOSTS = ['158.160.38.69', 'whatsupdoggy.sytes.net', 'localhost']
+ALLOWED_HOSTS = ['*', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -73,19 +73,25 @@ DATABASES = {
 
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.%s" % validator}
-    for validator in [
-        "UserAttributeSimilarityValidator",
-        "MinimumLengthValidator",
-        "CommonPasswordValidator",
-        "NumericPasswordValidator",
-    ]
+    {
+        'NAME':
+            ('django.contrib.auth.password_validation.UserAttributeSimilarityValidator'),
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
 ]
 
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = os.getenv('TIME_ZONE')
 
 USE_I18N = True
 
