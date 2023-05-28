@@ -111,16 +111,10 @@ class RecipeReadSerializer(ModelSerializer):
         ).exists()
 
 
-class RecipeWriteSerializer(ModelSerializer):
+class RecipeWriteSerializer(serializers.ModelSerializer):
     ingredients = CreateIngredientInRecipeSerializer(many=True)
-    tags = serializers.PrimaryKeyRelatedField(
-        queryset=Tag.objects.all(),
-        many=True
-    )
-    image = Base64ImageField(
-        use_url=True,
-        max_length=None
-    )
+    tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
+    image = Base64ImageField(use_url=True, max_length=None)
     author = UsersSerializer(read_only=True)
 
     class Meta:
@@ -137,25 +131,21 @@ class RecipeWriteSerializer(ModelSerializer):
 
     def create_ingredients(self, recipe, ingredients):
         IngredientInRecipe.objects.bulk_create(
-            [IngredientInRecipe(
-                recipe=recipe,
-                amount=ingredient['amount'],
-                ingredient=Ingredient.objects.get(id=ingredient['id'])
-            ) for ingredient in ingredients]
+            [
+                IngredientInRecipe(
+                    recipe=recipe,
+                    amount=ingredient['amount'],
+                    ingredient_id=ingredient['id']
+                )
+                for ingredient in ingredients
+            ]
         )
 
     def validate(self, data):
-        list_ingredients = [
-            ingredient['id'] for ingredient in data['ingredients']
-        ]
-        all_ingredients, unique_ingredients = (
-            len(list_ingredients), len(set(list_ingredients)))
-
-        if all_ingredients != unique_ingredients:
-            raise ValidationError(
-                {'IngredientsUniqueError':
-                    'Ингредиенты должны быть уникальными'}
-            )
+        ingredients = data.get('ingredients', [])
+        ingredient_ids = [ingredient['id'] for ingredient in ingredients]
+        if len(ingredient_ids) != len(set(ingredient_ids)):
+            raise serializers.ValidationError("Ингредиенты должны быть уникальными")
         return data
 
     @transaction.atomic
@@ -163,10 +153,7 @@ class RecipeWriteSerializer(ModelSerializer):
         request = self.context.get('request')
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
-        recipe = Recipe.objects.create(
-            author=request.user,
-            **validated_data
-        )
+        recipe = Recipe.objects.create(author=request.user, **validated_data)
         self.create_ingredients(recipe, ingredients)
         recipe.tags.set(tags)
         return recipe
@@ -179,12 +166,7 @@ class RecipeWriteSerializer(ModelSerializer):
         return super().update(instance, validated_data)
 
     def to_representation(self, instance):
-        return RecipeReadSerializer(
-            instance,
-            context={
-                'request': self.context.get('request')
-            }
-        ).data
+        return RecipeReadSerializer(instance, context={'request': self.context.get('request')}).data
 
 
 class ShortRecipe(ModelSerializer):

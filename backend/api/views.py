@@ -21,6 +21,7 @@ from .serializers import (CartSerializer, FavoriteSerializer,
 from recipes.models import (Cart, Favorite, Ingredient, IngredientInRecipe,
                             Recipe, Tag)
 from users.models import Subscription, User
+from django.utils import timezone
 
 
 class IngredientViewSet(ModelViewSet):
@@ -86,7 +87,7 @@ class RecipeViewSet(ModelViewSet):
             'ingredient__measurement_unit'
         ).annotate(quantity=Sum('amount'))
 
-        today = datetime.today()
+        today = timezone.now()
         shopping = (
             f'{request.user.username}, Ваш список покупок готов!\n'
             f'Дата: {today:%Y-%m-%d}\n\n'
