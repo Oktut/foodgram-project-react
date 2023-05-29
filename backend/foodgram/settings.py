@@ -2,6 +2,8 @@ import os
 
 from dotenv import load_dotenv
 
+os.environ['DJANGO_SETTINGS_MODULE'] = 'foodgram.settings'
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 load_dotenv()
