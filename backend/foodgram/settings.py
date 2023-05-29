@@ -24,10 +24,9 @@ INSTALLED_APPS = [
     'djoser',
     'django_filters',
     'api.apps.ApiConfig',
-    'recipes',
-    'users',
-    'colorfield',
-    'foodgram'
+    'recipes.apps.RecipesConfig',
+    'users.apps.UsersConfig',
+    'colorfield'
 ]
 
 MIDDLEWARE = [
