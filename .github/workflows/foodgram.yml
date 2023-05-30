@@ -55,7 +55,7 @@ jobs:
           push: true
           context: frontend/
           no-cache: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/infra-frontend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/infra_frontend:latest
 
   deploy:
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
