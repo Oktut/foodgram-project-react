@@ -113,7 +113,9 @@ class RecipeReadSerializer(ModelSerializer):
 
 class RecipeWriteSerializer(serializers.ModelSerializer):
     ingredients = CreateIngredientInRecipeSerializer(many=True)
-    tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
+    tags = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(), many=True
+    )
     image = Base64ImageField(use_url=True, max_length=None)
     author = UsersSerializer(read_only=True)
 
@@ -145,7 +147,9 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         ingredients = data.get('ingredients', [])
         ingredient_ids = [ingredient['id'] for ingredient in ingredients]
         if len(ingredient_ids) != len(set(ingredient_ids)):
-            raise serializers.ValidationError("Ингредиенты должны быть уникальными")
+            raise serializers.ValidationError(
+                "Ингредиенты должны быть уникальными"
+            )
         return data
 
     @transaction.atomic
@@ -166,7 +170,9 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
     def to_representation(self, instance):
-        return RecipeReadSerializer(instance, context={'request': self.context.get('request')}).data
+        return RecipeReadSerializer(
+            instance, context={'request': self.context.get('request')}
+        ).data
 
 
 class ShortRecipe(ModelSerializer):
