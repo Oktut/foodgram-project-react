@@ -11,7 +11,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from .filters import IngredientSearchFilter, RecipeFilterSet
 from .paginations import CustomPagination
-from .permissions import AdminOrReadOnly, RecipePermission
+from .permissions import RecipePermission
 from .serializers import (CartSerializer, FavoriteSerializer,
                           IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, SubscriptionListSerializer,
@@ -25,14 +25,12 @@ from django.utils import timezone
 class IngredientViewSet(ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    permission_classes = [AdminOrReadOnly]
     filter_backends = (IngredientSearchFilter,)
     search_fields = ('^name',)
 
 
 class TagViewSet(ModelViewSet):
     queryset = Tag.objects.all()
-    permission_classes = [AdminOrReadOnly]
     serializer_class = TagSerializer
 
 
