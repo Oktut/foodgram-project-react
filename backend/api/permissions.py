@@ -3,7 +3,7 @@ from rest_framework import permissions
 from users.models import UserRole
 
 
-class RecipePermission(permissions.BasePermission):
+class AdminOrReadOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if (request.method in permissions.SAFE_METHODS
