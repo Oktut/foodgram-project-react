@@ -1,13 +1,18 @@
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, AllowAny
+from rest_framework.permissions import SAFE_METHODS, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
+from recipes.models import (Cart, Favorite, Ingredient, IngredientInRecipe,
+                            Recipe, Tag)
+from users.models import Subscription, User
 
 from .filters import IngredientSearchFilter, RecipeFilterSet
 from .paginations import CustomPagination
@@ -16,11 +21,6 @@ from .serializers import (CartSerializer, FavoriteSerializer,
                           IngredientSerializer, RecipeReadSerializer,
                           RecipeWriteSerializer, SubscriptionListSerializer,
                           SubscriptionSerializer, TagSerializer)
-from recipes.models import (Cart, Favorite, Ingredient, IngredientInRecipe,
-                            Recipe, Tag)
-from users.models import Subscription, User
-
-from django.utils import timezone
 
 
 class IngredientViewSet(ModelViewSet):
