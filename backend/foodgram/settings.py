@@ -116,7 +116,6 @@ DJOSER = {
     'PERMISSIONS': {
         'user_list': ['rest_framework.permissions.AllowAny'],
         'user': ['djoser.permissions.CurrentUserOrRecipePermission']
-    
     },
     "SERIALIZERS": {
         "user": "api.serializers.UsersSerializer",
