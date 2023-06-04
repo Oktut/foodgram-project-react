@@ -132,4 +132,4 @@ sudo docker-compose exec backend python manage.py load_ingredients
 Над проектом работал:
 -YaOktut- Кирилов Андрей
 [GitHub](https://github.com/Oktut/)
-Студент курса "Разработчик Python" (51 когорта). 2022-2023 год.
+Студент курса "Разработчик Python" (50 когорта). 2022-2023 год.
